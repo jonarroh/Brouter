@@ -1,7 +1,6 @@
+import { lazy, Suspense } from 'react';
 import Route from './Route';
 import Router, { Routes } from './Router';
-import About from './views/About';
-import Home from './views/Home';
 import Info from './views/Info';
 
 type RouteComponent = (...props: any) => JSX.Element;
@@ -13,25 +12,30 @@ export interface RouteProps {
 const routes = [
 	{
 		path: '/',
-		component: Home
+		component: lazy(() => import('./views/Home'))
 	},
 	{
 		path: '/about',
-		component: About
+		component: lazy(() => import('./views/About'))
 	},
 	{
 		path: '/about/:id',
-		component: About
+		component: lazy(() => import('./views/About'))
 	}
 ] satisfies Routes[];
 
 export default function App() {
 	return (
 		<main>
-			<Router routes={routes}>
-				<Route path="/info" component={Info} />
-				<Route path="/comercio" component={() => <h1>Comercio</h1>} />
-			</Router>
+			<Suspense fallback={<h1>Cargando..</h1>}>
+				<Router routes={routes}>
+					<Route path="/info" component={Info} />
+					<Route
+						path="/comercio"
+						component={() => <h1>Comercio</h1>}
+					/>
+				</Router>
+			</Suspense>
 		</main>
 	);
 }
