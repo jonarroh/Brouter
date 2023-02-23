@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { Children, useEffect, useState } from 'react';
 import { match } from 'path-to-regexp';
 import { Routes } from './App';
 import { EVENTS } from './const';
@@ -11,9 +11,11 @@ interface Route {
 }
 
 function Router({
+	children,
 	routes = [],
 	defaultComponent: DefaultComponent = () => <div>404</div>
 }: Route) {
+	console.log(children);
 	const [currentPath, setPath] = useState(window.location.pathname);
 
 	useEffect(() => {
@@ -29,6 +31,13 @@ function Router({
 	}, []);
 
 	let routeParams = {};
+
+	//add children routes of <Route> to routes
+	const routesFromChildren = Children.toArray(children).map(
+		(child: any) => child.props
+	);
+
+	routes = [...routes, ...routesFromChildren];
 
 	const Component = routes.find(({ path }) => {
 		if (path === currentPath) return true;
