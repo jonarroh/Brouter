@@ -1,21 +1,24 @@
-import { Children, useEffect, useState } from 'react';
-import { match } from 'path-to-regexp';
-import { Routes } from './App';
+import React, { Children, useEffect, useState } from 'react';
+import { match, MatchResult } from 'path-to-regexp';
 import { EVENTS } from './const';
-interface Route {
+
+export interface Routes {
+	path: string;
+	component: React.ComponentType<any>;
+	routeParams?: Record<string, string>;
+}
+
+interface RouterProps {
 	routes: Routes[];
 	defaultComponent?: () => JSX.Element;
 	children?: React.ReactNode;
-	props?: any;
-	routeParams?: any;
 }
 
 function Router({
 	children,
 	routes = [],
 	defaultComponent: DefaultComponent = () => <div>404</div>
-}: Route) {
-	console.log(children);
+}: RouterProps) {
 	const [currentPath, setPath] = useState(window.location.pathname);
 
 	useEffect(() => {
@@ -30,10 +33,10 @@ function Router({
 		};
 	}, []);
 
-	let routeParams = {};
+	let routeParams: Record<string, string> = {};
 
 	//add children routes of <Route> to routes
-	const routesFromChildren = Children.toArray(children).map(
+	const routesFromChildren: Routes[] = Children.toArray(children).map(
 		(child: any) => child.props
 	);
 
@@ -42,9 +45,8 @@ function Router({
 	const Component = routes.find(({ path }) => {
 		if (path === currentPath) return true;
 		const urlMatcher = match(path, { decode: decodeURIComponent });
-		const matched = urlMatcher(currentPath);
+		const matched: MatchResult<any> | false = urlMatcher(currentPath);
 		if (!matched) return false;
-		console.log(matched.params);
 		routeParams = matched.params;
 		return true;
 	})?.component;

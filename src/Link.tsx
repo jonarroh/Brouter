@@ -5,16 +5,16 @@ interface LinkProps {
 	target?: string;
 	to: string;
 	children: React.ReactNode;
-	props?: any;
+	rest?: React.AnchorHTMLAttributes<HTMLAnchorElement>;
 }
-function navigate(href: string) {
+function navigate(href: string): void {
 	window.history.pushState({}, '', href);
 	//customEvent
 	const navigateEvent = new Event(EVENTS.PUSTSTATE);
 	window.dispatchEvent(navigateEvent);
 }
 
-function Link({ target, to, ...props }: LinkProps) {
+function Link({ target, to, children, ...rest }: LinkProps) {
 	const handleClick: MouseEventHandler<HTMLAnchorElement> = e => {
 		const isModifiedEvent =
 			e.metaKey || e.altKey || e.ctrlKey || e.shiftKey;
@@ -32,7 +32,11 @@ function Link({ target, to, ...props }: LinkProps) {
 			navigate(to);
 		}
 	};
-	return <a href={to} onClick={handleClick} {...props} />;
+	return (
+		<a href={to} onClick={handleClick} {...rest}>
+			{children}
+		</a>
+	);
 }
 
 export default Link;

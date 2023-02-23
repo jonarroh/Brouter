@@ -1,16 +1,16 @@
 import Route from './Route';
-import Router from './Router';
+import Router, { Routes } from './Router';
 import About from './views/About';
 import Home from './views/Home';
 import Info from './views/Info';
 
-export interface Routes {
+type RouteComponent = (...props: any) => JSX.Element;
+export interface RouteProps {
 	path: string;
-	component: (...props: any) => JSX.Element;
-	routeParams?: {};
+	component: RouteComponent;
 }
 
-const routes: Routes[] = [
+const routes = [
 	{
 		path: '/',
 		component: Home
@@ -23,7 +23,7 @@ const routes: Routes[] = [
 		path: '/about/:id',
 		component: About
 	}
-];
+] satisfies Routes[];
 
 export default function App() {
 	return (
