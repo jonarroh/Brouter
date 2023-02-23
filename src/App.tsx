@@ -5,7 +5,7 @@ import Home from './views/Home';
 
 export interface Routes {
 	path: string;
-	component: () => JSX.Element;
+	component: (...props: any) => JSX.Element;
 	routeParams?: any;
 }
 
@@ -16,6 +16,10 @@ const routes: Routes[] = [
 	},
 	{
 		path: '/about',
+		component: About
+	},
+	{
+		path: '/about/:id',
 		component: About
 	}
 ];

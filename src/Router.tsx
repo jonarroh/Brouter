@@ -7,6 +7,7 @@ interface Route {
 	defaultComponent?: () => JSX.Element;
 	children?: React.ReactNode;
 	props?: any;
+	routeParams?: any;
 }
 
 function Router({
@@ -34,8 +35,9 @@ function Router({
 		const urlMatcher = match(path, { decode: decodeURIComponent });
 		const matched = urlMatcher(currentPath);
 		if (!matched) return false;
-
+		console.log(matched.params);
 		routeParams = matched.params;
+		return true;
 	})?.component;
 
 	return (
@@ -43,7 +45,7 @@ function Router({
 			{Component ? (
 				<Component routeParams={routeParams} />
 			) : (
-				<DefaultComponent routeParams={routeParams} />
+				<DefaultComponent />
 			)}
 		</>
 	);
