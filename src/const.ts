@@ -1,3 +1,8 @@
 export const EVENTS = {
-	PUSTSTATE: 'pushstate'
+	PUSTSTATE: 'pushstate',
+	POPSTATE: 'popstate'
+};
+
+export const TARGET = {
+	SELF: '_self'
 };

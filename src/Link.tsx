@@ -1,4 +1,5 @@
 import { MouseEventHandler } from 'react';
+import { EVENTS, TARGET } from './const';
 
 interface LinkProps {
 	target?: string;
@@ -9,7 +10,7 @@ interface LinkProps {
 function navigate(href: string) {
 	window.history.pushState({}, '', href);
 	//customEvent
-	const navigateEvent = new Event('pushstate');
+	const navigateEvent = new Event(EVENTS.PUSTSTATE);
 	window.dispatchEvent(navigateEvent);
 }
 
@@ -20,7 +21,7 @@ function Link({ target, to, ...props }: LinkProps) {
 
 		const isCorrectClickEvent = e.button === 0;
 		const isManageableEvent =
-			target === undefined || target === '_self';
+			target === undefined || target === TARGET.SELF;
 
 		if (
 			!isModifiedEvent &&
