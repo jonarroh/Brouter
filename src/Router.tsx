@@ -1,12 +1,14 @@
-import { Children, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { match } from 'path-to-regexp';
 import { Routes } from './App';
+import { EVENTS } from './const';
 interface Route {
 	routes: Routes[];
 	defaultComponent?: () => JSX.Element;
 	children?: React.ReactNode;
 	props?: any;
 }
+
 function Router({
 	routes = [],
 	defaultComponent: DefaultComponent = () => <div>404</div>
@@ -14,12 +16,12 @@ function Router({
 	const [currentPath, setPath] = useState(window.location.pathname);
 
 	useEffect(() => {
-		window.addEventListener('pushstate', () => {
+		window.addEventListener(EVENTS.PUSTSTATE, () => {
 			setPath(window.location.pathname);
 		});
 
 		return () => {
-			window.removeEventListener('pushstate', () => {
+			window.removeEventListener(EVENTS.PUSTSTATE, () => {
 				setPath(window.location.pathname);
 			});
 		};
